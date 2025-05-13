@@ -1,0 +1,751 @@
+    /* =====================
+       Variables globales
+    ===================== */
+    :root {
+      --primary: #0066ff;
+      --primary-dark: #0055dd;
+      --secondary: #6c757d;
+      --dark: #212529;
+      --light: #f8f9fa;
+      --white: #ffffff;
+      --shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* =====================
+       Reset de base
+    ===================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--dark);
+      overflow-x: hidden;
+      background-color: var(--white);
+    }
+
+    /* =====================
+       Conteneur principal
+    ===================== */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* =====================
+       Boutons génériques
+    ===================== */
+    .btn {
+      display: inline-block;
+      background: var(--primary);
+      color: var(--white);
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(0, 102, 255, 0.3);
+    }
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 102, 255, 0.4);
+    }
+    .btn.btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      box-shadow: none;
+    }
+    .btn.btn-outline:hover {
+      background: var(--primary);
+      color: var(--white);
+      box-shadow: 0 8px 25px rgba(0, 102, 255, 0.4);
+    }
+
+    /* =====================
+       NAVBAR - Desktop
+    ===================== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: var(--white);
+      box-shadow: var(--shadow);
+      z-index: 1000;
+    }
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      min-height: 70px;
+    }
+    .navbar-brand a {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 700;
+      font-size: 24px;
+    }
+    .navbar-brand span {
+      margin-left: 8px;
+    }
+    .navbar-menu {
+      display: flex;
+    }
+    .navbar-nav {
+      display: flex;
+      list-style: none;
+    }
+    .nav-item {
+      margin: 0 15px;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      font-size: 16px;
+    }
+    .nav-link:hover, .nav-item.active .nav-link {
+      color: var(--primary);
+    }
+    .nav-link .material-icons {
+      margin-right: 5px;
+      font-size: 20px;
+    }
+    .navbar-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .navbar-toggle {
+      display: none;
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--dark);
+    }
+    /* Bloc avatar + commandes toujours visible si connecté */
+    .navbar-user-shortcut {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-link-shortcut {
+      display: flex;
+      align-items: center;
+      color: var(--dark);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 18px;
+      background: none;
+      border: none;
+      padding: 0 8px;
+      transition: color 0.3s;
+    }
+    .nav-link-shortcut:hover {
+      color: var(--primary);
+    }
+    .user-avatar-shortcut .material-icons {
+      margin-right: 4px;
+      font-size: 22px;
+    }
+    .user-name-shortcut {
+      font-size: 16px;
+      font-weight: 600;
+      margin-left: 2px;
+    }
+
+    /* =====================
+       NAVBAR - Responsive
+    ===================== */
+    @media (max-width: 992px) {
+      .navbar-container {
+        padding: 12px 10px;
+      }
+      .navbar-brand a {
+        font-size: 20px;
+      }
+      .nav-link, .nav-link-shortcut {
+        font-size: 15px;
+      }
+      .user-name-shortcut {
+        font-size: 15px;
+      }
+      .btn {
+        font-size: 15px;
+        padding: 10px 20px;
+      }
+    }
+    @media (max-width: 768px) {
+      /* Cache le menu principal et les actions, affiche le toggle */
+      .navbar-menu, .navbar-actions {
+        display: none;
+      }
+      .navbar-toggle {
+        display: block;
+      }
+      .navbar-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 6px;
+        min-height: 54px;
+      }
+      .navbar-brand a {
+        font-size: 17px;
+      }
+      .navbar-brand .material-icons {
+        font-size: 22px;
+      }
+      .navbar-user-shortcut {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: auto;
+      }
+      .nav-link-shortcut {
+        font-size: 15px;
+        padding: 0 4px;
+      }
+      .user-avatar-shortcut .material-icons {
+        font-size: 18px;
+      }
+      .user-name-shortcut {
+        font-size: 13px;
+      }
+      .btn {
+        font-size: 13px;
+        padding: 8px 14px;
+      }
+      /* Footer responsive : réduire la taille des textes et marges */
+      .footer {
+        padding: 40px 0 18px;
+      }
+      .footer-logo {
+        font-size: 18px;
+      }
+      .footer-description {
+        font-size: 13px;
+      }
+      .footer-column h4 {
+        font-size: 15px;
+        margin-bottom: 12px;
+      }
+      .footer-links a {
+        font-size: 13px;
+      }
+      .footer-links li {
+        margin-bottom: 7px;
+      }
+      .footer-contact-item {
+        font-size: 13px;
+        margin-bottom: 8px;
+      }
+      .footer-contact-item .material-icons {
+        font-size: 18px;
+      }
+      .footer-bottom {
+        padding-top: 14px;
+        font-size: 12px;
+      }
+      .footer-bottom-links a {
+        font-size: 12px;
+        margin-left: 10px;
+      }
+    }
+    @media (max-width: 480px) {
+      /* Pour les très petits écrans */
+      .navbar-container {
+        padding: 4px 2px;
+        min-height: 44px;
+      }
+      .navbar-brand a {
+        font-size: 14px;
+      }
+      .navbar-brand .material-icons {
+        font-size: 16px;
+      }
+      .navbar-user-shortcut {
+        gap: 3px;
+      }
+      .nav-link-shortcut {
+        font-size: 12px;
+        padding: 0 2px;
+      }
+      .user-avatar-shortcut .material-icons {
+        font-size: 14px;
+      }
+      .user-name-shortcut {
+        font-size: 10px;
+      }
+      .btn {
+        font-size: 11px;
+        padding: 6px 8px;
+      }
+      /* Footer encore plus compact sur très petits écrans */
+      .footer-logo {
+        font-size: 15px;
+      }
+      .footer-description {
+        font-size: 11px;
+      }
+      .footer-column h4 {
+        font-size: 12px;
+      }
+      .footer-links a {
+        font-size: 11px;
+      }
+      .footer-contact-item {
+        font-size: 11px;
+      }
+      .footer-contact-item .material-icons {
+        font-size: 15px;
+      }
+      .footer-bottom {
+        font-size: 10px;
+      }
+      .footer-bottom-links a {
+        font-size: 10px;
+        margin-left: 6px;
+      }
+    }
+    /* =====================
+       FIN NAVBAR
+    ===================== */
+
+    /* Hero Section */
+    .hero {
+      padding: 180px 0 100px;
+      background: linear-gradient(135deg, rgba(240, 249, 255, 0.8), rgba(214, 240, 253, 0.8));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-container {
+      display: flex;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-content {
+      flex: 1;
+      padding-right: 60px;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg, var(--primary), #00c6ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: var(--secondary);
+      margin-bottom: 40px;
+      max-width: 90%;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 20px;
+    }
+
+    .hero-image {
+      flex: 1;
+      position: relative;
+      transform: translateY(30px);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero-image img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    .shape {
+      position: absolute;
+      background: linear-gradient(45deg, rgba(0, 102, 255, 0.1), rgba(0, 102, 255, 0.05));
+      border-radius: 50%;
+    }
+
+    .shape-1 {
+      width: 400px;
+      height: 400px;
+      top: -100px;
+      left: -100px;
+    }
+
+    .shape-2 {
+      width: 300px;
+      height: 300px;
+      bottom: -50px;
+      right: 10%;
+    }
+
+    .shape-3 {
+      width: 200px;
+      height: 200px;
+      top: 20%;
+      right: -50px;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--dark);
+      color: var(--light);
+      padding: 80px 0 30px;
+    }
+
+    .footer-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 40px;
+      margin-bottom: 50px;
+    }
+
+    .footer-logo {
+      color: var(--white);
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      text-decoration: none;
+    }
+
+    .footer-logo span {
+      margin-left: 8px;
+    }
+
+    .footer-description {
+      margin-bottom: 20px;
+      opacity: 0.7;
+      line-height: 1.6;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-link {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .social-link:hover {
+      background: var(--primary);
+      transform: translateY(-5px);
+    }
+
+    .footer-column h4 {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: var(--white);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: var(--light);
+      opacity: 0.7;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      opacity: 1;
+      color: var(--primary);
+    }
+
+    .footer-contact-item {
+      display: flex;
+      align-items: start;
+      margin-bottom: 15px;
+    }
+
+    .footer-contact-item .material-icons {
+      margin-right: 10px;
+      color: var(--primary);
+    }
+
+    .footer-bottom {
+      padding-top: 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .copyright {
+      opacity: 0.7;
+    }
+
+    .footer-bottom-links a {
+      color: var(--light);
+      opacity: 0.7;
+      text-decoration: none;
+      margin-left: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .footer-bottom-links a:hover {
+      opacity: 1;
+      color: var(--primary);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 992px) {
+      .hero h1 {
+        font-size: 3rem;
+      }
+
+      .hero-container {
+        flex-direction: column;
+      }
+
+      .hero-content {
+        padding-right: 0;
+        margin-bottom: 60px;
+        text-align: center;
+      }
+
+      .hero p {
+        max-width: 100%;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar-menu, .navbar-actions {
+        display: none;
+      }
+
+      .navbar-toggle {
+        display: block;
+      }
+
+      .mobile-menu {
+        display: block;
+        position: fixed;
+        top: 80px;
+        left: 0;
+        width: 100%;
+        height: 0;
+        background: var(--white);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: height 0.3s ease;
+        z-index: 999;
+      }
+
+      .mobile-menu.active {
+        height: calc(100vh - 80px);
+        overflow-y: auto;
+      }
+
+      .mobile-nav {
+        list-style: none;
+        padding: 20px;
+      }
+
+      .mobile-nav-link {
+        display: block;
+        color: var(--dark);
+        font-size: 18px;
+        padding: 10px 0;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .mobile-nav-link:hover {
+        color: var(--primary);
+      }
+
+      .hero {
+        padding: 140px 0 60px;
+      }
+
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .navbar-user-shortcut {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: auto;
+      }
+
+      .navbar-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 10px;
+      }
+
+      .navbar-brand {
+        flex: 0 0 auto;
+      }
+
+      .navbar-user-shortcut {
+        flex: 0 0 auto;
+      }
+    }
+
+    /* =====================
+       MENU HAMBURGER (mobile)
+    ===================== */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 70px; /* sous la navbar */
+      right: 16px;
+      left: auto;
+      width: 250px; /* plus petit */
+      max-width: 92vw;
+      max-height: 45vh; /* hauteur réduite */
+      background: rgba(255,255,255,0.98); /* Légère transparence pour effet moderne */
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      z-index: 2000;
+      overflow-y: auto;
+      border-radius: 12px; /* coins plus petits */
+      transition: opacity 0.3s, transform 0.3s;
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    .mobile-menu.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .mobile-menu-header {
+      display: flex;
+      justify-content: flex-end;
+      padding: 12px 12px 0 0;
+    }
+    .mobile-close {
+      background: none;
+      border: none;
+      font-size: 32px;
+      color: var(--primary);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .mobile-close:hover {
+      color: var(--primary-dark);
+      /* Effet d'élévation au survol */
+      box-shadow: 0 2px 8px rgba(0,102,255,0.10);
+      background: #f0f6ff;
+      border-radius: 50%;
+    }
+    .mobile-nav {
+      list-style: none;
+      padding: 18px 0 0 0;
+      margin: 0;
+    }
+    .mobile-nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--dark);
+      font-size: 18px;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 12px 18px;
+      border-radius: 8px;
+      margin: 0 8px 6px 8px;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+      box-shadow: 0 1px 4px rgba(0,102,255,0.04);
+    }
+    .mobile-nav-link:hover {
+      background: linear-gradient(90deg, var(--primary), #00c6ff);
+      color: var(--white);
+      box-shadow: 0 6px 18px rgba(0,102,255,0.18);
+      transform: translateY(-2px) scale(1.05);
+    }
+    .mobile-nav-link .material-icons {
+      font-size: 22px;
+      margin-right: 6px;
+    }
+    /* Séparateur visuel entre les groupes de liens */
+    .mobile-nav-separator {
+      height: 1px;
+      background: #e3e8ee;
+      margin: 14px 10px;
+      border-radius: 2px;
+    }
+    /* Responsive pour très petits écrans */
+    @media (max-width: 480px) {
+      .mobile-menu {
+        width: 98vw;
+        right: 1vw;
+        left: auto;
+        max-height: 55vh; /* hauteur réduite aussi sur mobile */
+        border-radius: 8px;
+      }
+      .mobile-nav-link {
+        font-size: 15px;
+        padding: 10px 6px;
+        margin: 0 2px 6px 2px;
+      }
+      .mobile-menu-header {
+        padding: 8px 4px 0 0;
+      }
+      .mobile-nav-separator {
+        margin: 8px 2px;
+      }
+    }
+    /* =====================
+       FIN MENU HAMBURGER
+    ===================== */

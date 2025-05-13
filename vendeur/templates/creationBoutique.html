@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static '/css/creationBoutique.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container boutique-create-container">
+    <h2>Créer une boutique</h2>
+    <div class="alert alert-info" style="background:#e8f4fd;color:#1766a3;padding:12px 18px;border-radius:8px;margin-bottom:18px;font-size:1rem;">
+        <strong>Astuce :</strong> Placez-vous physiquement dans votre boutique avant de valider le formulaire, pour que la position soient exactes !
+    </div>
+    <form method="post" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            {{ form.nom.label_tag }}
+            {{ form.nom }}
+            {% if form.nom.help_text %}
+                <small class="form-text text-muted">{{ form.nom.help_text }}</small>
+            {% endif %}
+            {% for error in form.nom.errors %}
+                <div class="error-message text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        
+        <div class="form-group mb-3">
+            {{ form.logo.label_tag }}
+            {{ form.logo }}
+            {% if form.logo.help_text %}
+                <small class="form-text text-muted">{{ form.logo.help_text }}</small>
+            {% endif %}
+            {% for error in form.logo.errors %}
+                <div class="error-message text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form.contact.label_tag }}
+            {{ form.contact }}
+            {% if form.contact.help_text %}
+                <small class="form-text text-muted">{{ form.contact.help_text }}</small>
+            {% endif %}
+            {% for error in form.contact.errors %}
+                <div class="error-message text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+            {% if form.description.help_text %}
+                <small class="form-text text-muted">{{ form.description.help_text }}</small>
+            {% endif %}
+            {% for error in form.description.errors %}
+                <div class="error-message text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.slogan.label_tag }}
+            {{ form.slogan }}
+            {% if form.slogan.help_text %}
+                <small class="form-text text-muted">{{ form.slogan.help_text }}</small>
+            {% endif %}
+            {% for error in form.slogan.errors %}
+                <div class="error-message text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.adresse.label_tag }}
+            {{ form.adresse }}
+            {% if form.adresse.help_text %}
+                <small class="form-text text-muted">{{ form.adresse.help_text }}</small>
+            {% endif %}
+            {% for error in form.adresse.errors %}
+                <div class="error-message text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.latitude.label_tag }}
+            {{ form.latitude }}
+            {% if form.latitude.help_text %}
+                <small class="form-text text-muted">{{ form.latitude.help_text }}</small>
+            {% endif %}
+            {% for error in form.latitude.errors %}
+                <div class="error-message text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.longitude.label_tag }}
+            {{ form.longitude }}
+            {% if form.longitude.help_text %}
+                <small class="form-text text-muted">{{ form.longitude.help_text }}</small>
+            {% endif %}
+            {% for error in form.longitude.errors %}
+                <div class="error-message text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <div class="form-group mb-3">
+            {{ form.template_choisi.label_tag }}
+            {{ form.template_choisi }}
+            {% if form.template_choisi.help_text %}
+                <small class="form-text text-muted">{{ form.template_choisi.help_text }}</small>
+            {% endif %}
+            {% for error in form.template_choisi.errors %}
+                <div class="error-message text-danger">{{ error }}</div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary">Créer la boutique</button>
+    </form>
+    <script>
+      // Remplissage automatique latitude/longitude avec la géolocalisation navigateur
+      document.addEventListener('DOMContentLoaded', function() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var latInput = document.getElementById('id_latitude');
+            var lonInput = document.getElementById('id_longitude');
+            if (latInput && lonInput) {
+              latInput.value = position.coords.latitude;
+              lonInput.value = position.coords.longitude;
+            }
+          }, function(error) {
+            // Optionnel : afficher une alerte ou rien
+          });
+        }
+      });
+    </script>
+</div>
+{% endblock %}

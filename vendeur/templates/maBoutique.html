@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-content-boutique">
+<div class="boutique-header">
+  <h1>Ma Boutique</h1>
+  <button class="btn btn-primary" onclick="openAddProductModal()">Ajouter un produit</button>
+</div>
+
+<div class="produits-list">
+  {% for produit in produits %}
+    <div class="produit-card">
+      <div class="produit-image">
+        <img src="{{ produit.image.url }}" alt="Image de {{ produit.nom }}"/>
+      </div>
+      <div class="produit-info">
+        <h3>{{ produit.nom }}</h3>
+        <p>{{ produit.description|truncatechars:80 }}</p>
+        <div class="prix-stock">
+          <span class="prix">{{ produit.prix }} FCFA</span>
+          <span class="stock">Stock : {{ produit.stock }}</span>
+        </div>
+        <div class="disponibilite">
+          {% if produit.disponible %}
+            <span class="badge badge-success">Disponible</span>
+          {% else %}
+            <span class="badge badge-warning">Indisponible</span>
+          {% endif %}
+        </div>
+        <div class="actions">
+          <button class="btn btn-sm btn-secondary"
+                  onclick="openEditProductModal(
+                      '{{ produit.id }}',
+                      '{{ produit.nom|escapejs }}',
+                      '{{ produit.description|escapejs }}',
+                      '{{ produit.prix }}',
+                      '{{ produit.stock }}',
+                      '{{ produit.disponible|yesno:'true,false' }}'
+                  )">
+            Modifier
+          </button>
+          <form method="post" action="{% url 'vendeur:supprimer_produit' produit.id %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer ce produit ?')">Supprimer</button>
+          </form>
+          <form method="post" action="{% url 'vendeur:toggle_disponibilite' produit.id %}" style="display:inline;">
+            {% csrf_token %}
+            {% if produit.disponible %}
+              <button type="submit" class="btn btn-sm btn-warning">Marquer comme indisponible</button>
+            {% else %}
+              <button type="submit" class="btn btn-sm btn-success">Marquer comme disponible</button>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>Aucun produit pour l'instant.</p>
+  {% endfor %}
+</div>
+
+<!-- Modal Ajout Produit -->
+<div id="addProductModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeAddProductModal()">&times;</span>
+    <h2>Ajouter un produit</h2>
+    <form method="post" enctype="multipart/form-data" action="{% url 'vendeur:ajouter_produit' %}">
+      {% csrf_token %}
+      <input type="text" name="nom" placeholder="Nom du produit" required class="input-modal"/>
+      <textarea name="description" placeholder="Description" required class="input-modal"></textarea>
+      <input type="number" name="prix" placeholder="Prix (€)" step="0.01" min="0" required class="input-modal"/>
+      <input type="number" name="stock" placeholder="Stock" min="0" required class="input-modal"/>
+      <input type="file" name="image" accept="image/*" required class="input-modal"/>
+      <label><input type="checkbox" name="disponible" checked/> Disponible</label>
+      <button type="submit" class="btn btn-primary">Ajouter</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Modification Produit -->
+<div id="editProductModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeEditProductModal()">&times;</span>
+    <h2>Modifier le produit</h2>
+    <form id="editProductForm" method="post" enctype="multipart/form-data" action="">
+      {% csrf_token %}
+      <input type="text" name="nom" id="edit-nom" placeholder="Nom du produit" required class="input-modal"/>
+      <textarea name="description" id="edit-description" placeholder="Description" required class="input-modal"></textarea>
+      <input type="number" name="prix" id="edit-prix" placeholder="Prix (€)" step="0.01" min="0" required class="input-modal"/>
+      <input type="number" name="stock" id="edit-stock" placeholder="Stock" min="0" required class="input-modal"/>
+      <label><input type="checkbox" name="disponible" id="edit-disponible"/> Disponible</label>
+      <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </form>
+  </div>
+</div>
+
+<style>
+.page-content-boutique {
+  padding-top: 100px;
+}
+@media (max-width: 768px) {
+  .page-content-boutique {
+    padding-top: 70px;
+  }
+}
+.boutique-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.produits-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.produit-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 18px 22px;
+  width: 320px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+.produit-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #f3f3f3;
+}
+.produit-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.2em;
+}
+.produit-info p {
+  margin: 0 0 8px 0;
+  color: #555;
+  font-size: 0.98em;
+}
+.prix-stock {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+.badge-success {
+  background: #28a745;
+  color: #fff;
+}
+.badge-warning {
+  background: #ffc107;
+  color: #333;
+}
+.actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.btn-sm {
+  font-size: 0.95em;
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 3000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  overflow: auto;
+  background: rgba(0,0,0,0.35);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  margin: 40px auto;
+  padding: 24px 18px 18px 18px;
+  border-radius: 12px;
+  width: 95vw;
+  max-width: 420px;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.close {
+  color: #aaa;
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.close:hover { color: #dc3545; }
+.input-modal {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+@media (max-width: 600px) {
+  .produits-list {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .produit-card, .modal-content {
+    width: 98vw;
+    max-width: 99vw;
+    padding: 12px 6px;
+  }
+}
+</style>
+
+<script>
+function openAddProductModal() {
+  document.getElementById('addProductModal').style.display = 'block';
+}
+function closeAddProductModal() {
+  document.getElementById('addProductModal').style.display = 'none';
+}
+function openEditProductModal(id, nom, description, prix, stock, disponible) {
+  document.getElementById('edit-nom').value = nom;
+  document.getElementById('edit-description').value = description;
+  document.getElementById('edit-prix').value = prix;
+  document.getElementById('edit-stock').value = stock;
+  document.getElementById('edit-disponible').checked = (disponible === 'true');
+  document.getElementById('editProductForm').action = '/vendeur/produit/modifier/' + id + '/';
+  document.getElementById('editProductModal').style.display = 'block';
+}
+function closeEditProductModal() {
+  document.getElementById('editProductModal').style.display = 'none';
+}
+// Fermer les modals si on clique en dehors
+window.onclick = function(event) {
+  if (event.target == document.getElementById('addProductModal')) closeAddProductModal();
+  if (event.target == document.getElementById('editProductModal')) closeEditProductModal();
+}
+</script>
+</div>
+{% endblock %}

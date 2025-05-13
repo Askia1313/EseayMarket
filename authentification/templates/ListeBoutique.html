@@ -1,0 +1,249 @@
+{% extends "baseAdmin.html" %}
+{% load static %}
+{% block content %}
+<h1>Liste des boutiques</h1>
+
+<h2>Boutiques en attente de validation</h2>
+<div class="boutiques-list">
+  {% for boutique in boutiques_inactives %}
+    <div class="boutique-card clickable" data-id="{{ boutique.id }}" data-nom="{{ boutique.nom }}" data-description="{{ boutique.description|default:'Aucune description.' }}" data-logo="{% if boutique.logo %}{{ boutique.logo.url }}{% else %}https://via.placeholder.com/120x120?text=Logo{% endif %}" data-adresse="{{ boutique.adresse }}" data-contact="{{ boutique.contact }}" data-latitude="{{ boutique.latitude }}" data-longitude="{{ boutique.longitude }}" data-slogan="{{ boutique.slogan }}" data-active="0">
+      <div class="boutique-logo">
+        <img src="{% if boutique.logo %}{{ boutique.logo.url }}{% else %}https://via.placeholder.com/120x120?text=Logo{% endif %}" alt="Logo de {{ boutique.nom }}"/>
+      </div>
+      <div class="boutique-info">
+        <h3>{{ boutique.nom }}</h3>
+        <p>{{ boutique.description|default:'Aucune description.' }}</p>
+        <span class="badge badge-warning">En attente de validation</span>
+      </div>
+    </div>
+  {% empty %}
+    <p>Aucune boutique en attente de validation.</p>
+  {% endfor %}
+</div>
+
+<h2>Boutiques actives</h2>
+<div class="boutiques-list">
+  {% for boutique in boutiques_actives %}
+    <div class="boutique-card clickable" data-id="{{ boutique.id }}" data-nom="{{ boutique.nom }}" data-description="{{ boutique.description|default:'Aucune description.' }}" data-logo="{% if boutique.logo %}{{ boutique.logo.url }}{% else %}https://via.placeholder.com/120x120?text=Logo{% endif %}" data-adresse="{{ boutique.adresse }}" data-contact="{{ boutique.contact }}" data-latitude="{{ boutique.latitude }}" data-longitude="{{ boutique.longitude }}" data-slogan="{{ boutique.slogan }}" data-active="1">
+      <div class="boutique-logo">
+        <img src="{% if boutique.logo %}{{ boutique.logo.url }}{% else %}https://via.placeholder.com/120x120?text=Logo{% endif %}" alt="Logo de {{ boutique.nom }}"/>
+      </div>
+      <div class="boutique-info">
+        <h3>{{ boutique.nom }}</h3>
+        <p>{{ boutique.description|default:'Aucune description.' }}</p>
+        <span class="badge badge-success">Active</span>
+      </div>
+    </div>
+  {% empty %}
+    <p>Aucune boutique active.</p>
+  {% endfor %}
+</div>
+
+<!-- Modal pour infos boutique -->
+<div id="boutiqueModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div class="modal-header">
+      <img id="modal-logo" src="" alt="Logo" class="modal-logo"/>
+      <div>
+        <h2 id="modal-nom"></h2>
+        <p id="modal-slogan" class="modal-slogan"></p>
+      </div>
+    </div>
+    <div class="modal-body">
+      <p><strong>Description :</strong> <span id="modal-description"></span></p>
+      <p><strong>Adresse :</strong> <span id="modal-adresse"></span></p>
+      <p><strong>Contact :</strong> <span id="modal-contact"></span></p>
+      <div id="modal-map" style="height: 220px; width: 100%; margin: 16px 0;"></div>
+      <form id="activateForm" method="post" style="display:none;" action="{% url 'authentification:activate_boutique' %}">
+        {% csrf_token %}
+        <input type="hidden" name="boutique_id" id="modal-boutique-id" value="">
+        <button type="submit" class="btn btn-success">Activer la boutique</button>
+      </form>
+      <form id="deactivateForm" method="post" style="display:none;" action="{% url 'authentification:deactivate_boutique' %}">
+        {% csrf_token %}
+        <input type="hidden" name="boutique_id" id="modal-boutique-id-desactiver" value="">
+        <button type="submit" class="btn btn-danger">Désactiver la boutique</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+const cards = document.querySelectorAll('.boutique-card.clickable');
+let map = null;
+cards.forEach(card => {
+  card.addEventListener('click', function() {
+    document.getElementById('modal-logo').src = this.dataset.logo;
+    document.getElementById('modal-nom').textContent = this.dataset.nom;
+    document.getElementById('modal-slogan').textContent = this.dataset.slogan;
+    document.getElementById('modal-description').textContent = this.dataset.description;
+    document.getElementById('modal-adresse').textContent = this.dataset.adresse;
+    document.getElementById('modal-contact').textContent = this.dataset.contact;
+    document.getElementById('modal-boutique-id').value = this.dataset.id;
+    document.getElementById('modal-boutique-id-desactiver').value = this.dataset.id;
+    document.getElementById('boutiqueModal').style.display = 'block';
+    // Affiche le bon formulaire
+    if (this.dataset.active === "0") {
+      document.getElementById('activateForm').style.display = 'block';
+      document.getElementById('deactivateForm').style.display = 'none';
+    } else {
+      document.getElementById('activateForm').style.display = 'none';
+      document.getElementById('deactivateForm').style.display = 'block';
+    }
+    // Affiche la carte
+    setTimeout(() => {
+      if (map) { map.remove(); }
+      map = L.map('modal-map').setView([this.dataset.latitude, this.dataset.longitude], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+      }).addTo(map);
+      L.marker([this.dataset.latitude, this.dataset.longitude]).addTo(map);
+    }, 200);
+  });
+});
+function closeModal() {
+  document.getElementById('boutiqueModal').style.display = 'none';
+  if (map) { map.remove(); map = null; }
+}
+window.onclick = function(event) {
+  const modal = document.getElementById('boutiqueModal');
+  if (event.target == modal) {
+    closeModal();
+  }
+}
+</script>
+
+<style>
+.boutiques-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.boutique-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 18px 22px;
+  width: 320px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  cursor: default;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.boutique-card.clickable {
+  cursor: pointer;
+  border: 2px solid #ffc10733;
+}
+.boutique-card.clickable:hover {
+  box-shadow: 0 4px 24px #ffc10755;
+  transform: translateY(-2px) scale(1.03);
+}
+.boutique-logo img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #f3f3f3;
+}
+.boutique-info h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.2em;
+}
+.boutique-info p {
+  margin: 0 0 8px 0;
+  color: #555;
+  font-size: 0.98em;
+}
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+.badge-warning {
+  background: #ffc107;
+  color: #333;
+}
+.badge-success {
+  background: #28a745;
+  color: #fff;
+}
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 3000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  overflow: auto;
+  background: rgba(0,0,0,0.35);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  margin: 40px auto;
+  padding: 24px 18px 18px 18px;
+  border-radius: 12px;
+  width: 95vw;
+  max-width: 420px;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.close {
+  color: #aaa;
+  position: absolute;
+  right: 18px;
+  top: 12px;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.close:hover { color: #dc3545; }
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 10px;
+}
+.modal-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #f3f3f3;
+}
+.modal-slogan {
+  color: #0066ff;
+  font-size: 1em;
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .boutiques-list {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .boutique-card, .modal-content {
+    width: 98vw;
+    max-width: 99vw;
+    padding: 12px 6px;
+  }
+  .modal-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .modal-logo {
+    width: 48px;
+    height: 48px;
+  }
+}
+</style>
+{% endblock %}

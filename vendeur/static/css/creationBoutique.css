@@ -1,0 +1,111 @@
+/* ====== Création de boutique ====== */
+.boutique-create-container {
+    max-width: 480px;
+    margin: 32px auto;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0,102,255,0.07);
+    padding: 18px 14px 12px 14px;
+    transition: box-shadow 0.2s;
+  }
+  
+  .boutique-create-container h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--primary, #0066ff);
+    margin-bottom: 18px;
+    text-align: center;
+    letter-spacing: 1px;
+    margin-top: 6px;
+  }
+  
+  .boutique-create-container form {
+    width: 100%;
+  }
+  
+  .boutique-create-container .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .boutique-create-container label {
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 3px;
+    display: block;
+    font-size: 0.98em;
+  }
+  
+  .boutique-create-container input[type='text'],
+  .boutique-create-container input[type='number'],
+  .boutique-create-container input[type='file'],
+  .boutique-create-container textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #e3e8ee;
+    border-radius: 6px;
+    font-size: 0.98rem;
+    background: #f8f9fa;
+    transition: border 0.2s, box-shadow 0.2s;
+    margin-top: 1px;
+  }
+  
+  .boutique-create-container input[type='text']:focus,
+  .boutique-create-container input[type='number']:focus,
+  .boutique-create-container textarea:focus {
+    border-color: var(--primary, #0066ff);
+    box-shadow: 0 0 0 1.5px rgba(0,102,255,0.10);
+    outline: none;
+  }
+  
+  .boutique-create-container .form-text {
+    font-size: 0.92em;
+    color: #6c757d;
+    margin-top: 1px;
+  }
+  
+  .boutique-create-container .error-message {
+    color: #e91e63;
+    font-size: 0.92em;
+    margin-top: 2px;
+  }
+  
+  .boutique-create-container button[type='submit'] {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--primary, #0066ff), #00c6ff);
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,102,255,0.08);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+    margin-top: 6px;
+  }
+  
+  .boutique-create-container button[type='submit']:hover {
+    background: linear-gradient(90deg, #0055dd, #00aaff);
+    box-shadow: 0 4px 12px rgba(0,102,255,0.13);
+    transform: translateY(-1px) scale(1.01);
+  }
+  
+  .boutique-create-container .messages {
+    margin-bottom: 10px;
+  }
+  
+  .boutique-create-container input[type='file'] {
+    background: #f0f6ff;
+    border: 1px dashed #b3d1ff;
+    padding: 7px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .boutique-create-container {
+      padding: 10px 2px 8px 2px;
+      border-radius: 7px;
+    }
+    .boutique-create-container h2 {
+      font-size: 1.08rem;
+    }
+  }
