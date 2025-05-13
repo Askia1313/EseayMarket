@@ -5,6 +5,7 @@ app_name = 'vendeur'
 urlpatterns = [
     path('creer-boutique/', views.creer_boutique, name='creer_boutique'),
     path('ma-boutique/', views.ma_boutique, name='ma_boutique'),
+    path('ma-boutique/<int:boutique_id>/', views.ma_boutique_id, name='ma_boutique_id'),
     path('ajouter-produit/', views.ajouter_produit, name='ajouter_produit'),
     path('modifier-produit/<int:produit_id>/', views.modifier_produit, name='modifier_produit'),
     path('supprimer-produit/<int:produit_id>/', views.supprimer_produit, name='supprimer_produit'),

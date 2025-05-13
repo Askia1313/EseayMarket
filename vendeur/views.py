@@ -21,9 +21,21 @@ def creer_boutique(request):
 
 @login_required
 def ma_boutique(request):
-    boutique = get_object_or_404(Boutique, vendeur=request.user)
+    boutiques = Boutique.objects.filter(vendeur=request.user)
+    if not boutiques.exists():
+        messages.info(request, "Vous n'avez pas encore de boutique. Créez-en une pour commencer !")
+        return redirect('vendeur:creer_boutique')
+    # Affiche la première boutique par défaut (ou choisis une logique différente)
+    boutique = boutiques.first()
     produits = Produit.objects.filter(boutique=boutique)
-    return render(request, 'maBoutique.html', {'boutique': boutique, 'produits': produits})
+    return render(request, 'maBoutique.html', {'boutique': boutique, 'produits': produits, 'boutiques': boutiques})
+
+@login_required
+def ma_boutique_id(request, boutique_id):
+    boutique = get_object_or_404(Boutique, id=boutique_id, vendeur=request.user)
+    produits = Produit.objects.filter(boutique=boutique)
+    boutiques = Boutique.objects.filter(vendeur=request.user)
+    return render(request, 'maBoutique.html', {'boutique': boutique, 'produits': produits, 'boutiques': boutiques})
 
 @login_required
 def ajouter_produit(request):

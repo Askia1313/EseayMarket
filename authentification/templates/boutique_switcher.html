@@ -1,0 +1,34 @@
+<style>
+.boutique-switcher {
+  display: inline-block;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 8px 16px;
+  box-shadow: 0 2px 8px rgba(0,102,255,0.07);
+  margin-bottom: 18px;
+}
+.boutique-switcher select {
+  border: 1px solid #0066ff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 1em;
+  color: #1766a3;
+  background: #fff;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+.boutique-switcher select:focus {
+  border-color: #003399;
+  box-shadow: 0 0 0 2px #0066ff33;
+}
+</style>
+
+{% if boutiques|length > 1 %}
+  <div class="boutique-switcher" style="margin-left: 24px;">
+    <select onchange="window.location.href='{% url 'vendeur:ma_boutique_id' 0 %}'.replace('0', this.value)">
+      {% for b in boutiques %}
+        <option value="{{ b.id }}" {% if boutique and b.id == boutique.id %}selected{% endif %}>{{ b.nom }}</option>
+      {% endfor %}
+    </select>
+  </div>
+{% endif %} 
